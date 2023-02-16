@@ -9,7 +9,7 @@ function startAnimation(e) {
    // Get mouse coordinates
    let clickX = e.clientX;
    let clickY = e.clientY;  
-   if(timerId != null) clearInterval(timerId);
+   if(timerId !== null) clearInterval(timerId);
 
    timerId = setInterval(() => {moveImage(clickX, clickY);}, 10);
 }
