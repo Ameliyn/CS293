@@ -30,7 +30,7 @@ function fetchQuotes(topic, count) {
 }
 
 function responseReceivedHandler(){
-    if(this.response.error != undefined){
+    if(this.response.error !== undefined){
         let quotes = document.getElementById("quotes");
         quotes.innerHTML = this.response.error;
     }
