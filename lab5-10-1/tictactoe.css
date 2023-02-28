@@ -1,7 +1,5 @@
 body {
    font-family: Roboto, Helvetica, sans-serif;
-   text-align: center;
-
 }
 
 .x {
@@ -10,21 +8,21 @@ body {
 
 .o {
    color: blue;
- }
- 
-#board {
+}
+
+#gameBoard {
    font: 85px arial, sans-serif;
    margin: 3px;
+
    display: grid;
    grid-template-columns: 100px 100px 100px;
    grid-template-rows: 100px 100px 100px;
    grid-gap: 10px;
-   justify-content: center;
-   /* Your solution goes here */      
-
 }
 
-#board > div {
+#gameBoard > button {
    border: 1px solid LightSkyBlue;
    text-align: center;
+   font-size: 100%;
+   font-family: inherit;
 }
