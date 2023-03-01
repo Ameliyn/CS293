@@ -2,12 +2,22 @@
 <head>
     <link href="styles.css" rel="stylesheet">
     <title>Silly Tests</title>
-    <script src="sillyTests.js"></script>
+    <!--<script src="sillyTests.js"></script>-->
 </head>
-<div>
+<body>
+    <p id="ex">Paragraph 1</p>
     <p>
-        THIS IS IN THE CENTER WOOT
+        <a href="https://pintrest.com/">Pintrest</a>
     </p>
-</div>
+    <p class="ex">Paragraph 2</p>
+    <p name="ex">Paragraph 3</p>
+    <p type="ex">Paragraph 4</p>
+    <span id="example"></span>
+</body>
+<script>
+    let p = document.querySelectorAll("p");
+    document.getElementById("example").innerHTML = "The paragraph is : " + p[0].innerText;
+    let b = document.querySelector("a").href = "https://lclark.edu";
+</script>
 
 </html>
