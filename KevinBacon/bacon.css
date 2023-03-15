@@ -1,0 +1,30 @@
+img{
+    width: 300px;
+}
+h1{
+    padding: 5px;
+    font-family: Arial, serif;
+    font-size: 24px;
+    color: white;
+    background-color: red;
+}
+#author-name-and-date{
+    font-family: Arial, serif;
+    font-size: 12px;
+    color: lightgray;
+}
+#banner{
+    font-family: "Times New Roman", serif;
+    background-color: yellow;
+    
+}
+p, ol{
+    font-family: Times New Roman, serif;
+    font-size: 16px;
+    color: gray;
+}
+a{
+    font-family: Arial, serif;
+    font-size: 12px;
+    color: blue;
+}
