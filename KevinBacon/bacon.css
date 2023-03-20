@@ -16,6 +16,23 @@ p img{
     min-height: 600px;
 }
 
+table{
+    width: 70%;
+    margin: auto;
+    border: 2px solid;
+
+}
+tr:nth-of-type(even) {
+    background-color:#ddd;
+  }
+table td{
+    text-align: center;
+}
+table th{
+    border: 2px solid;
+    text-align: center;
+}
+
 #frame{
     background-color: gray;
     max-width: 1000px;

@@ -7,36 +7,30 @@
     getHeader();
     echo '<div id="main">';
     
+    
     echo "<h1>Results for $firstname $lastname</h1>";
-    var_dump(GetActor($firstname, $lastname));
+    $movies = GetMovieData($firstname, $lastname);
+    if($movies){
+        echo "<table>";
+        echo "<tr>";
+        echo "<th>#</th>";
+        echo "<th>Title</th>";
+        echo "<th>Year</th>";
+        $count = 1;
+        foreach($movies as $movie){
+            echo "<tr>";
+            echo "<td>".$count."</td>";
+            echo "<td>".$movie["name"]."</td>";
+            echo "<td>".$movie["year"]."</td>";
+            echo "</tr>";
+            $count++;
+        }
+        echo "</table>";    
+    }
+    else{
+        echo "<p>No data found for $firstname $lastname</p>";
+    }
     getForms();
     getFooter();
     echo '</div> <!-- end of #main div --></div> <!-- end of #frame div --></body>';
-    
-
-    function DisplayAllMovies(){
-        $db = ConnectToDatabase();
-        try {
-            $stmt = $db->prepare("select * from movies where");
-            
-            $stmt->execute();
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            /** see the resulting array **/
-            var_dump($rows);
-            
-            /** loop through the rows: **/
-            foreach ($rows as $row){
-            $id=$row["id"];
-            $name=$row["name"];
-            $year=$row["year"];
-            echo "id: $id, name: $name, year: $year";
-            }
-            
-            }
-            catch (Exception $e) {
-            
-            echo $e;
-            }
-    }
 ?>

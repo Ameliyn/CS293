@@ -20,28 +20,22 @@
         return $db;
     }
 
-    function GetActor($firstName, $lastName){
+    function GetMovieData($firstName, $lastName){
         $db = ConnectToDatabase();
         try {
-            $stmt = $db->prepare("SELECT * FROM actors WHERE first_name=:firstName and last_name=:lastName");
+            $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors JOIN roles ON roles.actor_id=actors.id 
+            JOIN movies ON movies.id=roles.movie_id
+            WHERE first_name=:firstName and last_name=:lastName");
             $data=array(":firstName"=>$firstName, ":lastName"=>$lastName);
             $stmt->execute($data);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $rows;
-            
-            } catch (Exception $e) {
-            return false;
+            if($rows)
+            {
+                return $rows;
             }
-    }
-
-    function GetMoviesByActorId($actorID){
-        $db = ConnectToDatabase();
-        try {
-            $stmt = $db->prepare("SELECT * FROM movies WHERE :actorID");
-            $data=array(":firstName"=>$firstName, ":lastName"=>$lastName);
-            $stmt->execute($data);
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $rows;
+            else{
+                return false;
+            }
             
             } catch (Exception $e) {
             return false;
