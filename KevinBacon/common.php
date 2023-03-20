@@ -20,7 +20,7 @@
         return $db;
     }
 
-    function GetMovieData($firstName, $lastName){
+    function GetMovieNameAndID($firstName, $lastName){
         $db = ConnectToDatabase();
         try {
             $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors JOIN roles ON roles.actor_id=actors.id 

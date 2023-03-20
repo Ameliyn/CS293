@@ -9,7 +9,7 @@
     
     
     echo "<h1>Results for $firstname $lastname</h1>";
-    $movies = GetMovieData($firstname, $lastname);
+    $movies = GetMovieNameAndID($firstname, $lastname);
     if($movies){
         echo "<table>";
         echo "<tr>";
