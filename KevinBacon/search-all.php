@@ -7,7 +7,6 @@
     getHeader();
     echo '<div id="main">';
     
-    
     echo "<h1>Results for $firstname $lastname</h1>";
     $movies = GetMovieNameAndID($firstname, $lastname);
     if($movies){

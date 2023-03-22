@@ -8,7 +8,7 @@
         $servername = "www.watzekdi.net";
         $username = "watzekdi_cs393";
         $password = "KevinBac0n";
-        $database = "watzekdi_imdb_small";
+        $database = "watzekdi_imdb";
         $dbport = 3306;
     
         try {
@@ -25,7 +25,7 @@
         try {
             $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors JOIN roles ON roles.actor_id=actors.id 
             JOIN movies ON movies.id=roles.movie_id
-            WHERE first_name=:firstName and last_name=:lastName");
+            WHERE first_name=:firstName AND last_name=:lastName");
             $data=array(":firstName"=>$firstName, ":lastName"=>$lastName);
             $stmt->execute($data);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -42,26 +42,72 @@
             }
     }
 
+    function GetMoviesWith($firstName1, $lastName1, $firstName2, $lastName2){
+        $db = ConnectToDatabase();
+        try {
+            $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors 
+            JOIN roles ON roles.actor_id=actors.id 
+            JOIN movies ON movies.id=roles.movie_id
+            WHERE (first_name LIKE :firstName1 and last_name=:lastName1);");
+            $data=array(":firstName1"=>$firstName1."%", ":lastName1"=>$lastName1);
+            $stmt->execute($data);
+            $rows1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($rows1)
+            {
+                $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors 
+                JOIN roles ON roles.actor_id=actors.id 
+                JOIN movies ON movies.id=roles.movie_id
+                WHERE (first_name LIKE :firstName2 and last_name=:lastName2);");
+                $data=array(":firstName2"=>$firstName2."%", ":lastName2"=>$lastName2);
+                $stmt->execute($data);
+                $rows2 = $stmt->fetchAll(PDO::FETCH_ASSOC);   
+                if($rows2){
+                    $result = [];
+                    foreach($rows1 as $row1){
+                        if(in_array($row1, $rows2))
+                        {
+                            array_push($result, $row1);
+                        }
+                    }
+                    return $result;
+                }
+                else{
+                    return ["No database entry for ".$firstName2." ".$lastName2];
+                }
+            }
+            else{
+                return ["No database entry for ".$firstName1." ".$lastName1];
+            }
+            
+            } catch (Exception $e) {
+            return false;
+            }
+    }
+
     function getHead(){
         echo '<head>
 		<title>My Movie Database (MyMDb)</title>
 		<meta charset="utf-8" />
-		<link href="https://webster.cs.washington.edu/images/kevinbacon/favicon.png" type="image/png" rel="shortcut icon" />
+		<link href="http://localhost:8080/Desktop/CS293/images/favicon.ico" type="image/png" rel="shortcut icon" />
 
 		<!-- Link to your CSS file that you should edit -->
 		<link href="bacon.css" type="text/css" rel="stylesheet" /></head>';
     }
     function getHeader(){
         echo '<div id="banner">
-        <a href="mymdb.php"><img src="https://webster.cs.washington.edu/images/kevinbacon/mymdb.png" alt="banner logo" /></a>
+        <a href="mymdb.php"><img src="http://localhost:8080/Desktop/CS293/KevinBacon/images/mymdb.png" alt="banner logo" /></a>
         My Movie Database
         </div>';
     }
 
     function getFooter(){
         echo '<div id="w3c">
-        <a href="https://webster.cs.washington.edu/validate-html.php"><img src="https://webster.cs.washington.edu/images/w3c-html.png" alt="Valid HTML5" /></a>
-        <a href="https://webster.cs.washington.edu/validate-css.php"><img src="https://webster.cs.washington.edu/images/w3c-css.png" alt="Valid CSS" /></a>
+        <a href="https://webster.cs.washington.edu/validate-html.php"><img src="http://localhost:8080/Desktop/CS293/KevinBacon/images/w3c-html.png" alt="Valid HTML5" /></a>
+        <a href="http://jigsaw.w3.org/css-validator/check/referer">
+        <img style="border:0;width:88px;height:31px"
+            src="http://jigsaw.w3.org/css-validator/images/vcss"
+            alt="Valid CSS!" />
+        </a>
         </div>';
     }
     function getForms(){

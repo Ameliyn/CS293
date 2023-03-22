@@ -3,7 +3,7 @@
 	<head>
 		<title>My Movie Database (MyMDb)</title>
 		<meta charset="utf-8" />
-		<link href="https://webster.cs.washington.edu/images/kevinbacon/favicon.png" type="image/png" rel="shortcut icon" />
+		<link href="http://localhost:8080/Desktop/CS293/images/favicon.ico" type="image/png" rel="shortcut icon" />
 
 		<!-- Link to your CSS file that you should edit -->
 		<link href="bacon.css" type="text/css" rel="stylesheet" />
@@ -12,14 +12,14 @@
 	<body>
 		<div id="frame">
 			<div id="banner">
-				<a href="mymdb.php"><img src="https://webster.cs.washington.edu/images/kevinbacon/mymdb.png" alt="banner logo" /></a>
+				<a href="mymdb.php"><img src="http://localhost:8080/Desktop/CS293/KevinBacon/images/mymdb.png" alt="banner logo" /></a>
 				My Movie Database
 			</div>
 
 			<div id="main">
 				<h1>The One Degree of Kevin Bacon</h1>
 				<p>Type in an actor's name to see if he/she was ever in a movie with Kevin Bacon!</p>
-				<p><img src="https://webster.cs.washington.edu/images/kevinbacon/kevin_bacon.jpg" alt="Kevin Bacon" /></p>
+				<p><img src="http://localhost:8080/Desktop/CS293/KevinBacon/images/kevin_bacon.jpg" alt="Kevin Bacon" /></p>
 
 				<!-- form to search for every movie by a given actor -->
 				<form action="search-all.php" method="get">

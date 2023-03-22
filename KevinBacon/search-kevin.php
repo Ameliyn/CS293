@@ -8,28 +8,34 @@
     echo '<div id="main">';
     
     
-    echo "<h1>Results for $firstname $lastname</h1>";
-    $roles = GetMoviesByActorName($firstname, $lastname);
-    if($roles){
-        echo "<table>";
-        echo "<tr>";
-        echo "<th>#</th>";
-        echo "<th>Title</th>";
-        echo "<th>Year</th>";
-        $count = 1;
-        foreach($roles as $role){
-            $movie = GetMovieData($role["movie_id"]);
-            echo "<tr>";
-            echo "<td>".$count."</td>";
-            echo "<td>".$movie["name"]."</td>";
-            echo "<td>".$movie["year"]."</td>";
-            echo "</tr>";
-            $count++;
+    
+    $movies = GetMoviesWith("Kevin", "Bacon", $firstname, $lastname);
+    if($movies){
+        if(gettype($movies[0]) == "string"){
+            echo "<h1>".$movies[0]."</h1>";
         }
-        echo "</table>";    
+        else{
+            echo "<h1>Results for Kevin Bacon and $firstname $lastname</h1>";
+            echo "<table>";
+            echo "<tr>";
+            echo "<th>#</th>";
+            echo "<th>Title</th>";
+            echo "<th>Year</th>";
+            $count = 1;
+            foreach($movies as $movie){
+                echo "<tr>";
+                echo "<td>".$count."</td>";
+                echo "<td>".$movie["name"]."</td>";
+                echo "<td>".$movie["year"]."</td>";
+                echo "</tr>";
+                $count++;
+            }
+            echo "</table>"; 
+        }
+           
     }
     else{
-        echo "<p>No data found for $firstname $lastname</p>";
+        echo "<h1>No movies found with Kevin Bacon and $firstname $lastname</h1>";
     }
     getForms();
     getFooter();
