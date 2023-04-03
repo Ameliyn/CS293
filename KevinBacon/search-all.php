@@ -7,16 +7,33 @@
     getHeader();
     echo '<div id="main">';
     
-    echo "<h1>Results for $firstname $lastname</h1>";
+
     $movies = GetMovieNameAndID($firstname, $lastname);
     if($movies){
+        $firstname = $movies[0]["first_name"];
+        $lastname = $movies[0]["last_name"];
+        echo '<h1>Results for '.$firstname.' '.$lastname.'</h1>';
         echo "<table>";
         echo "<tr>";
         echo "<th>#</th>";
         echo "<th>Title</th>";
         echo "<th>Year</th>";
+        echo "</tr>";
         $count = 1;
         foreach($movies as $movie){
+            if($firstname != $movie["first_name"]){
+                $firstname = $movie["first_name"];
+                $lastname = $movie["last_name"];
+                echo "</table>";
+                echo '<h1>Results for '.$firstname.' '.$lastname.'</h1>';
+                echo "<table>";
+                echo "<tr>";
+                echo "<th>#</th>";
+                echo "<th>Title</th>";
+                echo "<th>Year</th>";
+                echo "</tr>";
+                $count = 1;
+            }
             echo "<tr>";
             echo "<td>".$count."</td>";
             echo "<td>".$movie["name"]."</td>";
@@ -27,7 +44,7 @@
         echo "</table>";    
     }
     else{
-        echo "<p>No data found for $firstname $lastname</p>";
+        echo "<h1>No data found for $firstname $lastname</h1>";
     }
     getForms();
     getFooter();

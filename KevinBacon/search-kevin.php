@@ -8,21 +8,40 @@
     echo '<div id="main">';
     
     
-    
-    $movies = GetMoviesWith("Kevin", "Bacon", $firstname, $lastname);
+    $firstname1 = "Kevin";
+    $lastname1 = "Bacon";
+    $firstname2 = $firstname;
+    $lastname2 = $lastname;
+    $movies = GetMoviesWith($firstname1, $lastname1, $firstname2, $lastname2);
     if($movies){
         if(gettype($movies[0]) == "string"){
             echo "<h1>".$movies[0]."</h1>";
         }
         else{
-            echo "<h1>Results for Kevin Bacon and $firstname $lastname</h1>";
+            $firstname2 = $movies[0]["first_name"];
+            $lastname2 = $movies[0]["last_name"];
+            echo "<h1>Results for ".$firstname1." ".$lastname1." and ".$firstname2." ".$lastname2."</h1>";
             echo "<table>";
             echo "<tr>";
             echo "<th>#</th>";
             echo "<th>Title</th>";
             echo "<th>Year</th>";
+            echo "</tr>";
             $count = 1;
             foreach($movies as $movie){
+                if($firstname2 !== $movie["first_name"]){
+                    $firstname2 = $movies[0]["first_name"];
+                    $lastname2 = $movies[0]["last_name"];
+                    echo "</table>";
+                    echo "<h1>Results for ".$firstname1." ".$lastname1." and ".$firstname2." ".$lastname2."</h1>";
+                    echo "<table>";
+                    echo "<tr>";
+                    echo "<th>#</th>";
+                    echo "<th>Title</th>";
+                    echo "<th>Year</th>";
+                    echo "</tr>";
+                    $count = 1;
+                }
                 echo "<tr>";
                 echo "<td>".$count."</td>";
                 echo "<td>".$movie["name"]."</td>";

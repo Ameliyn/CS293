@@ -23,9 +23,10 @@
     function GetMovieNameAndID($firstName, $lastName){
         $db = ConnectToDatabase();
         try {
-            $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors JOIN roles ON roles.actor_id=actors.id 
+            $stmt = $db->prepare("SELECT actors.first_name, actors.last_name, movies.name, movies.year FROM actors JOIN roles ON roles.actor_id=actors.id
             JOIN movies ON movies.id=roles.movie_id
-            WHERE first_name LIKE :firstName AND last_name=:lastName");
+            WHERE first_name LIKE :firstName AND last_name=:lastName
+            ORDER BY first_name, movies.year");
             $data=array(":firstName"=>$firstName."%", ":lastName"=>$lastName);
             $stmt->execute($data);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -45,43 +46,28 @@
     function GetMoviesWith($firstName1, $lastName1, $firstName2, $lastName2){
         $db = ConnectToDatabase();
         try {
-            $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors 
-            JOIN roles ON roles.actor_id=actors.id 
-            JOIN movies ON movies.id=roles.movie_id
-            WHERE (first_name LIKE :firstName1 and last_name=:lastName1);");
-            $data=array(":firstName1"=>$firstName1."%", ":lastName1"=>$lastName1);
+            $stmt = $db->prepare("SELECT a2.first_name, a2.last_name, m.name, m.year
+            FROM movies m
+            JOIN roles r1 ON r1.movie_id = m.id
+            JOIN roles r2 on r2.movie_id = m.id
+            JOIN actors a1 on a1.id = r1.actor_id
+            JOIN actors a2 on a2.id = r2.actor_id
+            WHERE (a1.first_name LIKE :firstName1 and a1.last_name=:lastName1) AND
+            (a2.first_name LIKE :firstName2 and a2.last_name=:lastName2)
+            ORDER BY a2.first_name, m.year;");
+            $data=array(":firstName1"=>$firstName1."%", ":lastName1"=>$lastName1,
+            ":firstName2"=>$firstName2."%", ":lastName2"=>$lastName2);
             $stmt->execute($data);
-            $rows1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            if($rows1)
-            {
-                $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors 
-                JOIN roles ON roles.actor_id=actors.id 
-                JOIN movies ON movies.id=roles.movie_id
-                WHERE (first_name LIKE :firstName2 and last_name=:lastName2);");
-                $data=array(":firstName2"=>$firstName2."%", ":lastName2"=>$lastName2);
-                $stmt->execute($data);
-                $rows2 = $stmt->fetchAll(PDO::FETCH_ASSOC);   
-                if($rows2){
-                    $result = [];
-                    foreach($rows1 as $row1){
-                        if(in_array($row1, $rows2))
-                        {
-                            array_push($result, $row1);
-                        }
-                    }
-                    return $result;
-                }
-                else{
-                    return ["No database entry for ".$firstName2." ".$lastName2];
-                }
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($rows){
+                return $rows;
             }
             else{
-                return ["No database entry for ".$firstName1." ".$lastName1];
+                return ["No commonality between ".$firstName1." ".$lastName1." and ".$firstName2." ".$lastName2];
             }
-            
-            } catch (Exception $e) {
+        } catch (Exception $e) {
             return false;
-            }
+        }
     }
 
     function getHead(){
