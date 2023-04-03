@@ -25,8 +25,8 @@
         try {
             $stmt = $db->prepare("SELECT movies.name, movies.year FROM actors JOIN roles ON roles.actor_id=actors.id 
             JOIN movies ON movies.id=roles.movie_id
-            WHERE first_name=:firstName AND last_name=:lastName");
-            $data=array(":firstName"=>$firstName, ":lastName"=>$lastName);
+            WHERE first_name LIKE :firstName AND last_name=:lastName");
+            $data=array(":firstName"=>$firstName."%", ":lastName"=>$lastName);
             $stmt->execute($data);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if($rows)
