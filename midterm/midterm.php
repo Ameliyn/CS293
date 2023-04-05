@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<head><title>MidtermPractice</title></head>
+<body>
 <?php 
 
     function show_twos($input){
@@ -16,3 +19,5 @@
     echo show_twos(120);
 
 ?>
+</body>
+</html>
