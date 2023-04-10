@@ -1,0 +1,37 @@
+Skye Russ Midterm 2 Text Answers
+
+SQL Queries (All ran on imdb_small)
+1. 
+    SELECT first_name from actors
+    WHERE last_name LIKE "A%" AND gender="F";
+    18 Rows
+
+2.
+    SELECT first_name, last_name FROM directors d
+    JOIN movies_directors m ON m.director_id=d.id
+    JOIN movies_genres g ON g.movie_id=m.movie_id
+    WHERE g.genre="Comedy";
+    14 Rows
+
+3. 
+    SELECT m.name FROM actors a
+    JOIN directors d ON (a.last_name=d.last_name AND a.first_name=d.first_name)
+    JOIN roles r on r.actor_id=a.id
+    JOIN movies m on m.id=r.movie_id;
+    11 Rows
+
+4.
+    SELECT a.first_name, a.last_name from actors a
+    JOIN roles r1 ON r1.actor_id=a.id
+    JOIN roles r2 ON r2.actor_id=a.id
+    JOIN movies m1 on m1.id=r1.movie_id
+    JOIN movies m2 on m2.id=r2.movie_id
+    WHERE m1.name="Kill Bill: Vol. 1" AND m2.name="Kill Bill: Vol. 2";
+    10 Rows
+
+Multiple Choice:
+1. C
+2. C
+3. B
+4. A
+5. C
