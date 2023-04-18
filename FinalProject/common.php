@@ -77,6 +77,51 @@
         }
     }
 
+    function getArtistData($firstname, $lastname){
+
+        $data = connectToDatabase();
+        $access_token = $data->access_token;
+        $token_type = $data->token_type;
+        $expires_in = $data->expires_in;
+
+        $artistID = getArtistId($firstname, $lastname, $data);
+
+        $linkToArtist = "https://api.spotify.com/v1/artists/".$artistID;
+        $authorization = "Authorization: Bearer ".$access_token;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $linkToArtist);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array($authorization));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $returnData = curl_exec($ch);
+
+        $data = json_decode($returnData);
+        #var_dump($data);
+        $followers = json_decode(json_encode($data->followers));
+        echo "<h1>".$data->name."</h1>";
+        echo "Followers: ".$followers->total;
+        return $data;
+
+    }
+
+    function getArtistId($firstname, $lastname, $data){
+        $access_token = $data->access_token;
+        $token_type = $data->token_type;
+        $expires_in = $data->expires_in;
+        $artist = "%20artist:".$firstname."+".$lastname;
+        $linkToQuery = "https://api.spotify.com/v1/search?query=".$artist."type=artist";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $linkToQuery);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array($authorization));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $returnData = curl_exec($ch);
+
+        $data = json_decode($returnData);
+        
+        return $data->id;
+    }
+
     function getHead(){
         echo '<head>
 		<title>Playlist Sorter</title>
@@ -87,6 +132,7 @@
 		<link href="final.css" type="text/css" rel="stylesheet" />
 	    </head>';
     }
+
     function getHeader(){
 
         echo '<div id="banner">
@@ -104,6 +150,44 @@
         echo '<div id="footer">
         <img src="SpotifyIco.png" alt="banner logo"/> Powered by Spotify.
         </div>';
+    }
+
+    function getButtons(){
+        echo '
+            <!-- form to search for a specific artist -->
+            <form action="search_artist.php" method="get">
+                <fieldset>
+                    <legend>Search Artist</legend>
+                    <div>
+                        <input name="firstname" type="text" size="12" placeholder="first name" autofocus="autofocus" /> 
+                        <input name="lastname" type="text" size="12" placeholder="last name" /> 
+                        <input type="submit" value="go" />
+                    </div>
+                </fieldset>
+            </form>
+
+            <!-- form to search for a specific albumn-->
+            <form action="search_albumn.php" method="get">
+                <fieldset>
+                    <legend>Tracks in an albumn</legend>
+                    <div>
+                        <input name="albumnname" type="text" size="12" placeholder="first name" />  
+                        <input type="submit" value="go" />
+                    </div>
+                </fieldset>
+            </form>
+
+            <!-- form to search for a specific playlist-->
+            <form action="search_playlist.php" method="get">
+                <fieldset>
+                    <legend>Tracks in a playlist</legend>
+                    <div>
+                        <input name="playlistname" type="text" size="12" placeholder="first name" />  
+                        <input type="submit" value="go" />
+                    </div>
+                </fieldset>
+            </form>
+            ';
     }
 
 ?>

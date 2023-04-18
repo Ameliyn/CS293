@@ -8,11 +8,10 @@
 
     echo '<div id="main">';
     
-    getTestPlaylistData();
+    getArtistData($firstname, $lastname);
     
     getButtons();
     echo '</div>';
-    
 
     getFooter();
     echo '</div> <!-- end of #frame div --></body>';
