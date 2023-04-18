@@ -18,7 +18,7 @@
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         
-        
+
         $returnData = curl_exec($ch);
         $data = json_decode($returnData);
         return $data;
@@ -81,7 +81,7 @@
         echo '<head>
 		<title>Playlist Sorter</title>
 		<meta charset="utf-8" />
-		<link href="http://localhost:8080/Desktop/CS293/FinalProject/SpotifyIco.png" type="image/png" rel="shortcut icon" />
+		<link href="SpotifyIco.png" type="image/png" rel="shortcut icon" />
 
 		<!-- Link to your CSS file that you should edit -->
 		<link href="final.css" type="text/css" rel="stylesheet" />
@@ -102,7 +102,7 @@
     }
     function getFooter(){
         echo '<div id="footer">
-        <img src="http://localhost:8080/Desktop/CS293/FinalProject/SpotifyIco.png" alt="banner logo"/> Powered by Spotify.
+        <img src="SpotifyIco.png" alt="banner logo"/> Powered by Spotify.
         </div>';
     }
 

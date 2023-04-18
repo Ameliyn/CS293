@@ -6,7 +6,7 @@
     echo '<body><div id="frame">';
     getHeader();
 
-    echo '<div id="main"><h1>Not Yet Implementing</h1>';
+    echo '<div id="main">';
     
     getTestPlaylistData();
     
