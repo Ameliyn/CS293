@@ -48,33 +48,25 @@
         return $data;
     }
 
-    function getTestPlaylistData(){
-        $data = connectToDatabase();
-        $access_token = $data->access_token;
-        $token_type = $data->token_type;
-        $expires_in = $data->expires_in;
+    
 
-
-        $linkToArtist = "https://api.spotify.com/v1/playlists/5BBewul3kwrAVabUKpxQfm?si=38d16d63c34f4cad";
+    function getTrackDetails($credentials, $trackID){
+        $access_token = $credentials->access_token;
+        $token_type = $credentials->token_type;
+        $expires_in = $credentials->expires_in;
         $authorization = "Authorization: Bearer ".$access_token;
 
+        
+        $linkToTrack = "https://api.spotify.com/v1/audio-features/".$trackID;
+
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $linkToArtist);
+        curl_setopt($ch, CURLOPT_URL, $linkToTrack);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array($authorization));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $returnData = curl_exec($ch);
 
-        $data = json_decode($returnData);
-        #var_dump($data);
-        $followers = json_decode(json_encode($data->followers));
-        echo "<h1>".$data->name."</h1>";
-        echo "Followers: ".$followers->total."</br>";
-        
-        $tracks = json_decode(json_encode($data->tracks));
-        $items = json_decode(json_encode($tracks->items));
-        foreach($items as $item){
-            echo "Song Name: ".$item->track->name."</br>";
-        }
+        $trackData = json_decode($returnData);
+        return $trackData;
     }
 
     function getArtistData($firstname, $lastname){
@@ -153,6 +145,30 @@
     }
 
     function getButtons(){
+
+        echo '
+            <!-- form to search for a specific artist -->
+            <form action="search_artist.php" method="get">
+                <fieldset>
+                    <legend>Search by Artist Link</legend>
+                    <div>
+                        <input name="Link" type="text" size="12" placeholder="https://..." autofocus="autofocus" /> 
+                        <input type="submit" value="go" />
+                    </div>
+                </fieldset>
+            </form>
+            
+            <!-- form to search for a specific artist -->
+            <form action="search_playlist.php" method="get">
+                <fieldset>
+                    <legend>Search by Playlist Link</legend>
+                    <div>
+                        <input name="Link" type="text" size="12" placeholder="https://..." autofocus="autofocus" /> 
+                        <input type="submit" value="go" />
+                    </div>
+                </fieldset>
+            </form>';
+        /*
         echo '
             <!-- form to search for a specific artist -->
             <form action="search_artist.php" method="get">
@@ -188,6 +204,7 @@
                 </fieldset>
             </form>
             ';
+            */
     }
 
 ?>

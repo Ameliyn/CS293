@@ -8,8 +8,6 @@
 
     echo '<div id="main">';
     
-    getTestPlaylistData();
-    
     getButtons();
     echo '</div>';
     

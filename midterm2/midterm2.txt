@@ -13,12 +13,14 @@ SQL Queries (All ran on imdb_small)
     WHERE g.genre="Comedy";
     14 Rows
 
-3. 
-    SELECT m.name FROM actors a
-    JOIN directors d ON (a.last_name=d.last_name AND a.first_name=d.first_name)
-    JOIN roles r on r.actor_id=a.id
-    JOIN movies m on m.id=r.movie_id;
-    11 Rows
+3. -----UPDATED-----
+    SELECT d.first_name, d.last_name FROM movies m
+    JOIN movies_directors md on md.movie_id = m.id
+    JOIN roles r on r.movie_id=m.id
+    JOIN actors a on a.id = r.actor_id
+    JOIN directors d on d.id = md.director_id
+    where (a.last_name=d.last_name AND a.first_name=d.first_name)
+    10 Rows
 
 4.
     SELECT a.first_name, a.last_name from actors a
