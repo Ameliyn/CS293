@@ -85,12 +85,13 @@
         $items = json_decode(json_encode($tracks->items));
 
         echo "<table><tr>";
-        echo "<th>#</th><th>Song Name</th><th>Danceability</th><th>Energy</th><th>Loudness</th><th>Acousticness</th>";
+        echo "<th>#</th><th id=name>Song Name</th><th id=name>Artist Name</th><th>Danceability</th><th>Energy</th><th>Loudness</th><th>Acousticness</th>";
         echo "<th>Instrumentalness</th><th>Liveness</th><th>Valence</th><th>Tempo</th><th>Duration</th></tr>";
         $songNumber = 1;
         foreach($items as $item){
             echo "<tr><td>".$songNumber."</td>";
-            echo "<td>".$item->track->name."</td>";
+            echo "<td id=name><a href=".$item->track->external_urls->spotify." target=_blank>".$item->track->name."</a></td>";
+            echo "<td id=name><a href=".$item->track->artists[0]->external_urls->spotify." target=_blank>".$item->track->artists[0]->name."</a></td>";
             $trackData = getTrackDetails($credentials, explode(":",$item->track->uri)[2]);
             echo "<td>".$trackData->danceability."</td>";
             echo "<td>".$trackData->energy."</td>";
