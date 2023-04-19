@@ -24,32 +24,6 @@
         return $data;
     }
 
-    function getTestArtistData(){
-        $data = connectToDatabase();
-        $access_token = $data->access_token;
-        $token_type = $data->token_type;
-        $expires_in = $data->expires_in;
-
-
-        $linkToArtist = "https://api.spotify.com/v1/artists/39EIRTZx1JjfeDLVdbj2ap?si=f137b8d066dc4443";
-        $authorization = "Authorization: Bearer ".$access_token;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $linkToArtist);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array($authorization));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $returnData = curl_exec($ch);
-
-        $data = json_decode($returnData);
-        #var_dump($data);
-        $followers = json_decode(json_encode($data->followers));
-        echo "<h1>".$data->name."</h1>";
-        echo "Followers: ".$followers->total;
-        return $data;
-    }
-
-    
-
     function getTrackDetails($credentials, $trackID){
         $access_token = $credentials->access_token;
         $token_type = $credentials->token_type;
@@ -69,50 +43,7 @@
         return $trackData;
     }
 
-    function getArtistData($firstname, $lastname){
-
-        $data = connectToDatabase();
-        $access_token = $data->access_token;
-        $token_type = $data->token_type;
-        $expires_in = $data->expires_in;
-
-        $artistID = getArtistId($firstname, $lastname, $data);
-
-        $linkToArtist = "https://api.spotify.com/v1/artists/".$artistID;
-        $authorization = "Authorization: Bearer ".$access_token;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $linkToArtist);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array($authorization));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $returnData = curl_exec($ch);
-
-        $data = json_decode($returnData);
-        #var_dump($data);
-        $followers = json_decode(json_encode($data->followers));
-        echo "<h1>".$data->name."</h1>";
-        echo "Followers: ".$followers->total;
-        return $data;
-
-    }
-
-    function getArtistId($firstname, $lastname, $data){
-        $access_token = $data->access_token;
-        $token_type = $data->token_type;
-        $expires_in = $data->expires_in;
-        $artist = "%20artist:".$firstname."+".$lastname;
-        $linkToQuery = "https://api.spotify.com/v1/search?query=".$artist."type=artist";
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $linkToQuery);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array($authorization));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $returnData = curl_exec($ch);
-
-        $data = json_decode($returnData);
-        
-        return $data->id;
-    }
+    
 
     function getHead(){
         echo '<head>
