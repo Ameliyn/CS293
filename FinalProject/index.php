@@ -7,7 +7,8 @@
     getHeader();
 
     echo '<div id="main">';
-    
+    echo "<h1> Enter a link to get started!</h1>";
+
     getButtons();
     echo '</div>';
     

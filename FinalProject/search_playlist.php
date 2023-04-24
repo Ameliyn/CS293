@@ -78,21 +78,43 @@
             echo "Error ".$data->error->status.": ".$data->error->message;
             return;
         }
-        echo "<h1><img src=".$data->images[0]->url." width=100px></h1>";
-        echo "<a href=".$artist_link." target=_blank><h1>".$data->name."</h1></a>";
+
+        $playlistData = new stdClass();
+        $playlistData->image = new stdClass();
+        $playlistData->image->url = $data->images[0]->url;
+        $playlistData->artistLink = $artist_link;
+        $playlistData->name = $data->name;
+        $playlistData->tracks = new stdClass();
+        $playlistData->tracks = $data->tracks;
+
+        for($i = 1; $i <= sizeof($playlistData->tracks->items); $i++){
+            $item = $playlistData->tracks->items[$i-1];
+            $item->songNumber=$i;
+            $item->trackData = new stdClass();
+            $item->trackData = getTrackDetails($credentials, explode(":",$item->track->uri)[2]);
+        }
+        displayPlaylistTable($playlistData);
+        return $playlistData;
+
+    }
+
+    function displayPlaylistTable($playlistData){
         
-        $tracks = json_decode(json_encode($data->tracks));
-        $items = json_decode(json_encode($tracks->items));
+        echo "<h1><img src=".$playlistData->image->url." width=100px></h1>";
+        echo "<a href=".$playlistData->artistLink." target=_blank><h1>".$playlistData->name."</h1></a>";
+        
+        $tracks = $playlistData->tracks;
+        $items = $tracks->items;
 
         echo "<table><tr>";
         echo "<th>#</th><th id=name>Song Name</th><th id=name>Artist Name</th><th>Danceability</th><th>Energy</th><th>Loudness</th><th>Acousticness</th>";
         echo "<th>Instrumentalness</th><th>Liveness</th><th>Valence</th><th>Tempo</th><th>Duration</th></tr>";
-        $songNumber = 1;
-        foreach($items as $item){
-            echo "<tr><td>".$songNumber."</td>";
+        for($i = 1; $i <= sizeof($playlistData->tracks->items); $i++){
+            $item = $playlistData->tracks->items[$i-1];
+            echo "<tr><td>".$item->songNumber."</td>";
             echo "<td id=name><a href=".$item->track->external_urls->spotify." target=_blank>".$item->track->name."</a></td>";
             echo "<td id=name><a href=".$item->track->artists[0]->external_urls->spotify." target=_blank>".$item->track->artists[0]->name."</a></td>";
-            $trackData = getTrackDetails($credentials, explode(":",$item->track->uri)[2]);
+            $trackData = $item->trackData;
             echo "<td>".$trackData->danceability."</td>";
             echo "<td>".$trackData->energy."</td>";
             echo "<td>".$trackData->loudness."</td>";
@@ -103,9 +125,41 @@
             echo "<td>".$trackData->tempo."</td>";
             echo "<td>".$trackData->duration_ms."</td>";
             echo "</tr>";
-            $songNumber++;
         }
         echo "</table>";
+    }
+
+    function sortPlaylistBy($playlistData, $sortBy){
+        usort($playlistData->tracks->items, $sortBy."Test");
+        return 1;
+    }
+
+    function danceabilityTest($a, $b){
+        return $b->trackData->danceability - $a->trackData->danceability;
+    }
+    function energyTest($a, $b){
+        return $b->trackData->energy - $a->trackData->energy;
+    }
+    function loudnessTest($a, $b){
+        return $b->trackData->loudness - $a->trackData->loudness;
+    }
+    function acousticnessTest($a, $b){
+        return $b->trackData->acousticness - $a->trackData->acousticness;
+    }
+    function instrumentalnessTest($a, $b){
+        return $b->trackData->instrumentalness - $a->trackData->instrumentalness;
+    }
+    function livenessTest($a, $b){
+        return $b->trackData->liveness - $a->trackData->liveness;
+    }
+    function valenceTest($a, $b){
+        return $b->trackData->valence - $a->trackData->valence;
+    }
+    function tempoTest($a, $b){
+        return $b->trackData->tempo - $a->trackData->tempo;
+    }
+    function duration_msTest($a, $b){
+        return $b->trackData->duration_ms - $a->trackData->duration_ms;
     }
     ?>
 </html>
