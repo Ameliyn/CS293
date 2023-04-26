@@ -40,6 +40,18 @@
         $returnData = curl_exec($ch);
 
         $trackData = json_decode($returnData);
+        if(isset($trackData->error)){
+            $trackData = new stdClass();
+            $trackData->danceability = 0;
+            $trackData->energy = 0;
+            $trackData->loudness = 0;
+            $trackData->acousticness = 0;
+            $trackData->instrumentalness = 0;
+            $trackData->liveness = 0;
+            $trackData->valence = 0;
+            $trackData->tempo = 0;
+            $trackData->duration_ms = 0;
+        }
         return $trackData;
     }
 
@@ -79,17 +91,6 @@
 
         echo '
             <!-- form to search for a specific artist -->
-            <form action="search_artist.php" method="get">
-                <fieldset>
-                    <legend>Search by Artist Link</legend>
-                    <div>
-                        <input name="Link" type="text" size="12" placeholder="https://..." autofocus="autofocus" /> 
-                        <input type="submit" value="go" />
-                    </div>
-                </fieldset>
-            </form>
-            
-            <!-- form to search for a specific artist -->
             <form action="search_playlist.php" method="get">
                 <fieldset>
                     <legend>Search by Playlist Link</legend>
@@ -99,6 +100,16 @@
                     </div>
                 </fieldset>
             </form>';
+            /*<!-- form to search for a specific artist -->
+            <form action="search_artist.php" method="get">
+                <fieldset>
+                    <legend>Search by Artist Link</legend>
+                    <div>
+                        <input name="Link" type="text" size="12" placeholder="https://..." autofocus="autofocus" /> 
+                        <input type="submit" value="go" />
+                    </div>
+                </fieldset>
+            </form>*/
     }
 
 ?>

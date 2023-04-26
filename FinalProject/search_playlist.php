@@ -8,7 +8,7 @@
 
     echo '<div id="main">';
     
-    if(isset($_GET["Link"])) {
+    if(isset($_GET["Link"]) && $_GET["Link"] != "") {
         if(isset($_GET["Sort"])){
             $playlist = sortPlaylistBy(getPlaylistData($_GET["Link"]), $_GET["Sort"]);
             displayPlaylistTable($playlist);
@@ -19,7 +19,9 @@
         }
     }
     else {
-        getTestPlaylistData();
+        $link = "https://open.spotify.com/playlist/2NU5u1cPCTWlP9Jo0dcm5G?si=30a00cb5f9724042";
+        $playlist = getPlaylistData($link);
+        displayPlaylistTable($playlist);
     }
 
     getButtons();
@@ -28,36 +30,6 @@
     getFooter();
     echo '</div> <!-- end of #frame div --></body>';
     
-    
-    
-    function getTestPlaylistData(){
-        $data = connectToDatabase();
-        $access_token = $data->access_token;
-        $token_type = $data->token_type;
-        $expires_in = $data->expires_in;
-
-
-        $linkToArtist = "https://api.spotify.com/v1/playlists/5BBewul3kwrAVabUKpxQfm?si=38d16d63c34f4cad";
-        $authorization = "Authorization: Bearer ".$access_token;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $linkToArtist);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array($authorization));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $returnData = curl_exec($ch);
-
-        $data = json_decode($returnData);
-        #var_dump($data);
-        $followers = json_decode(json_encode($data->followers));
-        echo "<h1>".$data->name."</h1>";
-        echo "Followers: ".$followers->total."</br>";
-        
-        $tracks = json_decode(json_encode($data->tracks));
-        $items = json_decode(json_encode($tracks->items));
-        foreach($items as $item){
-            echo "Song Name: ".$item->track->name."</br>";
-        }
-    }
 
     function getPlaylistData($artist_link){
         session_start();
@@ -121,7 +93,6 @@
         
         echo "<table>";
         echo getPlaylistHeaders();
-
         for($i = 1; $i <= sizeof($playlistData->tracks->items); $i++){
             $item = $playlistData->tracks->items[$i-1];
             echo "<tr><td>".$item->songNumber."</td>";

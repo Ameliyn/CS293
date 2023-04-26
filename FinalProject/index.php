@@ -2,6 +2,10 @@
 <html>
     <?php include "common.php"?>
     <?php
+    session_destroy();
+    $_SESSION = array();
+    
+    session_start();
     getHead();
     echo '<body><div id="frame">';
     getHeader();
