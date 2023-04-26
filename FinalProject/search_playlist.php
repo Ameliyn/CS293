@@ -9,7 +9,14 @@
     echo '<div id="main">';
     
     if(isset($_GET["Link"])) {
-        getPlaylistData($_GET["Link"]);
+        if(isset($_GET["Sort"])){
+            $playlist = sortPlaylistBy(getPlaylistData($_GET["Link"]), $_GET["Sort"]);
+            displayPlaylistTable($playlist);
+        }
+        else{
+            $playlist = getPlaylistData($_GET["Link"]);
+            displayPlaylistTable($playlist);
+        }
     }
     else {
         getTestPlaylistData();
@@ -53,6 +60,11 @@
     }
 
     function getPlaylistData($artist_link){
+        session_start();
+        if(isset($_SESSION[$artist_link])){
+            return $_SESSION[$artist_link];
+        }
+
         $credentials = connectToDatabase();
         $access_token = $credentials->access_token;
         $token_type = $credentials->token_type;
@@ -93,7 +105,7 @@
             $item->trackData = new stdClass();
             $item->trackData = getTrackDetails($credentials, explode(":",$item->track->uri)[2]);
         }
-        displayPlaylistTable($playlistData);
+        $_SESSION[$artist_link] = $playlistData;
         return $playlistData;
 
     }
@@ -106,9 +118,10 @@
         $tracks = $playlistData->tracks;
         $items = $tracks->items;
 
-        echo "<table><tr>";
-        echo "<th>#</th><th id=name>Song Name</th><th id=name>Artist Name</th><th>Danceability</th><th>Energy</th><th>Loudness</th><th>Acousticness</th>";
-        echo "<th>Instrumentalness</th><th>Liveness</th><th>Valence</th><th>Tempo</th><th>Duration</th></tr>";
+        
+        echo "<table>";
+        echo getPlaylistHeaders();
+
         for($i = 1; $i <= sizeof($playlistData->tracks->items); $i++){
             $item = $playlistData->tracks->items[$i-1];
             echo "<tr><td>".$item->songNumber."</td>";
@@ -129,37 +142,84 @@
         echo "</table>";
     }
 
+    function getPlaylistHeaders(){
+        $header =  '<tr>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=songNumber'.'">#</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=songName'.'">Song Name</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=artistName'.'">Artist Name</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=danceability'.'">Danceability</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=energy'.'">Energy</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=loudness'.'">Loudness</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=acousticness'.'">Acousticness</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=instrumentalness'.'">Instrumentalness</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=liveness'.'">Liveness</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=valence'.'">Valence</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=tempo'.'">Tempo</a></th>';
+        $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=duration_ms'.'">Duration(ms)</a></th>';
+        $header .= '</tr>';
+
+        return $header;
+    }
+
     function sortPlaylistBy($playlistData, $sortBy){
         usort($playlistData->tracks->items, $sortBy."Test");
-        return 1;
+        return $playlistData;
+    }
+    function songNumberTest($a,$b){
+        return $a->songNumber - $b->songNumber;
+    }
+    function songNameTest($a, $b){
+        return strcmp($a->track->name, $b->track->name);
+    }
+    function artistNameTest($a, $b){
+        return strcasecmp($a->track->artists[0]->name, $b->track->artists[0]->name);
     }
 
     function danceabilityTest($a, $b){
-        return $b->trackData->danceability - $a->trackData->danceability;
+        if($b->trackData->danceability == $a->trackData->danceability) return 0;
+        else if($b->trackData->danceability > $a->trackData->danceability) return 1;
+        else return -1;
     }
     function energyTest($a, $b){
-        return $b->trackData->energy - $a->trackData->energy;
+        if($b->trackData->energy == $a->trackData->energy) return 0;
+        else if($b->trackData->energy > $a->trackData->energy) return 1;
+        else return -1;
     }
     function loudnessTest($a, $b){
-        return $b->trackData->loudness - $a->trackData->loudness;
+        if($b->trackData->loudness == $a->trackData->loudness) return 0;
+        else if($b->trackData->loudness > $a->trackData->loudness) return 1;
+        else return -1;
     }
     function acousticnessTest($a, $b){
-        return $b->trackData->acousticness - $a->trackData->acousticness;
+        if($b->trackData->acousticness == $a->trackData->acousticness) return 0;
+        else if($b->trackData->acousticness > $a->trackData->acousticness) return 1;
+        else return -1;
     }
     function instrumentalnessTest($a, $b){
-        return $b->trackData->instrumentalness - $a->trackData->instrumentalness;
+        if($b->trackData->instrumentalness == $a->trackData->instrumentalness) return 0;
+        else if($b->trackData->instrumentalness > $a->trackData->instrumentalness) return 1;
+        else return -1;
     }
     function livenessTest($a, $b){
-        return $b->trackData->liveness - $a->trackData->liveness;
+        if($b->trackData->liveness == $a->trackData->liveness) return 0;
+        else if($b->trackData->liveness > $a->trackData->liveness) return 1;
+        else return -1;
     }
     function valenceTest($a, $b){
-        return $b->trackData->valence - $a->trackData->valence;
+        if($b->trackData->valence == $a->trackData->valence) return 0;
+        else if($b->trackData->valence > $a->trackData->valence) return 1;
+        else return -1;
     }
     function tempoTest($a, $b){
-        return $b->trackData->tempo - $a->trackData->tempo;
+        if($b->trackData->tempo == $a->trackData->tempo) return 0;
+        else if($b->trackData->tempo > $a->trackData->tempo) return 1;
+        else return -1;
     }
     function duration_msTest($a, $b){
-        return $b->trackData->duration_ms - $a->trackData->duration_ms;
+        if($b->trackData->duration_ms == $a->trackData->duration_ms) return 0;
+        else if($b->trackData->duration_ms > $a->trackData->duration_ms) return 1;
+        else return -1;
     }
+    
     ?>
 </html>

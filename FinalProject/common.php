@@ -99,43 +99,6 @@
                     </div>
                 </fieldset>
             </form>';
-        /*
-        echo '
-            <!-- form to search for a specific artist -->
-            <form action="search_artist.php" method="get">
-                <fieldset>
-                    <legend>Search Artist</legend>
-                    <div>
-                        <input name="firstname" type="text" size="12" placeholder="first name" autofocus="autofocus" /> 
-                        <input name="lastname" type="text" size="12" placeholder="last name" /> 
-                        <input type="submit" value="go" />
-                    </div>
-                </fieldset>
-            </form>
-
-            <!-- form to search for a specific albumn-->
-            <form action="search_albumn.php" method="get">
-                <fieldset>
-                    <legend>Tracks in an albumn</legend>
-                    <div>
-                        <input name="albumnname" type="text" size="12" placeholder="first name" />  
-                        <input type="submit" value="go" />
-                    </div>
-                </fieldset>
-            </form>
-
-            <!-- form to search for a specific playlist-->
-            <form action="search_playlist.php" method="get">
-                <fieldset>
-                    <legend>Tracks in a playlist</legend>
-                    <div>
-                        <input name="playlistname" type="text" size="12" placeholder="first name" />  
-                        <input type="submit" value="go" />
-                    </div>
-                </fieldset>
-            </form>
-            ';
-            */
     }
 
 ?>
