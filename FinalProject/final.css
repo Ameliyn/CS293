@@ -65,3 +65,6 @@ a{
 th a {
     color: black;
 }
+#searchBar{
+    min-width: 300px;
+}

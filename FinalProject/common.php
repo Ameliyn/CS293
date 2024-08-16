@@ -71,7 +71,10 @@
     function getHeader(){
 
         echo '<div id="banner">
-        <a href="index.php"></a>
+        <!-- form to search for a specific artist -->
+            <form id="homeButton" action="index.php" method="get">
+                    <div><input type="submit" value="HOME" /></div>
+            </form>
         Playlist Sorter!
         </div>';
     }
@@ -83,7 +86,7 @@
     }
     function getFooter(){
         echo '<div id="footer">
-        <img src="SpotifyIco.png" alt="banner logo"/> Powered by Spotify.
+        <a href="https://spotify.com" target=_blank><img src="SpotifyIco.png" alt="banner logo"/></a> Powered by Spotify.
         </div>';
     }
 
@@ -95,7 +98,7 @@
                 <fieldset>
                     <legend>Search by Playlist Link</legend>
                     <div>
-                        <input name="Link" type="text" size="12" placeholder="https://..." autofocus="autofocus" /> 
+                        <input id="searchBar" name="Link" type="text" size="12" placeholder="https://..." autofocus="autofocus" /> 
                         <input type="submit" value="go" />
                     </div>
                 </fieldset>

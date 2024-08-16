@@ -95,7 +95,9 @@
         echo getPlaylistHeaders();
         for($i = 1; $i <= sizeof($playlistData->tracks->items); $i++){
             $item = $playlistData->tracks->items[$i-1];
-            echo "<tr><td>".$item->songNumber."</td>";
+            echo "<tr>";
+            echo "<td><img src=".$item->track->album->images[0]->url." width=40px></td>";
+            echo "<td>".$item->songNumber."</td>";
             echo "<td id=name><a href=".$item->track->external_urls->spotify." target=_blank>".$item->track->name."</a></td>";
             echo "<td id=name><a href=".$item->track->artists[0]->external_urls->spotify." target=_blank>".$item->track->artists[0]->name."</a></td>";
             $trackData = $item->trackData;
@@ -115,6 +117,7 @@
 
     function getPlaylistHeaders(){
         $header =  '<tr>';
+        $header .= '<th>Image</th>';
         $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=songNumber'.'">#</a></th>';
         $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=songName'.'">Song Name</a></th>';
         $header .= '<th><a href="'.explode("&", $_SERVER["REQUEST_URI"])[0].'&Sort=artistName'.'">Artist Name</a></th>';
